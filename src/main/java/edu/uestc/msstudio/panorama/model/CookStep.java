@@ -22,7 +22,7 @@ import javax.persistence.Id;
  * @author: MT
  */
 @Entity
-public class CookingStep {
+public class CookStep {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

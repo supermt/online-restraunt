@@ -27,9 +27,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import edu.uestc.msstudio.panorama.common.utils.JwtTokenUtil;
-import edu.uestc.msstudio.panorama.model.JwtUser;
 import edu.uestc.msstudio.panorama.model.User;
 import edu.uestc.msstudio.panorama.model.UserRole;
+import edu.uestc.msstudio.panorama.model.auth.JwtUser;
 import edu.uestc.msstudio.panorama.repo.UserRepository;
 import edu.uestc.msstudio.panorama.repo.UserRoleRepository;
 import edu.uestc.msstudio.panorama.service.AuthService;

@@ -22,9 +22,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import edu.uestc.msstudio.panorama.model.JwtAuthenticationRequest;
-import edu.uestc.msstudio.panorama.model.JwtAuthenticationResponse;
 import edu.uestc.msstudio.panorama.model.User;
+import edu.uestc.msstudio.panorama.model.auth.JwtAuthenticationRequest;
+import edu.uestc.msstudio.panorama.model.auth.JwtAuthenticationResponse;
 import edu.uestc.msstudio.panorama.service.AuthService;
 import io.swagger.annotations.Api;
 
@@ -66,8 +66,12 @@ public class AuthController {
         }
     }
     @RequestMapping(value = "${jwt.route.authentication.register}", method = RequestMethod.POST)
-    public User register(@RequestBody User addedUser)
+    public ResponseEntity<?> register(@RequestBody User addedUser)
             throws AuthenticationException {
-        return authService.register(addedUser);
+        User newUser = authService.register(addedUser);
+        if (newUser == null)
+            return ResponseEntity.status(400)
+                    .body("The User Has Already been registered");
+        return ResponseEntity.ok(newUser);
     }
 }

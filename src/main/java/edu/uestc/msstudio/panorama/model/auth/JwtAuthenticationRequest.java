@@ -1,4 +1,4 @@
-package edu.uestc.msstudio.panorama.model;
+package edu.uestc.msstudio.panorama.model.auth;
 
 import java.io.Serializable;
 

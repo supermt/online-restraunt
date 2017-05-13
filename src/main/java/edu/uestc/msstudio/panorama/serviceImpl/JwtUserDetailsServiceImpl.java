@@ -17,8 +17,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import edu.uestc.msstudio.panorama.model.JwtUserFactory;
 import edu.uestc.msstudio.panorama.model.User;
+import edu.uestc.msstudio.panorama.model.auth.JwtUserFactory;
 import edu.uestc.msstudio.panorama.repo.UserRepository;
 
 /** 

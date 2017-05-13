@@ -46,7 +46,7 @@ import io.swagger.annotations.ApiOperation;
  */
 @RestController
 @RequestMapping("/user")
-public class HomeController {
+public class UserController {
     @Autowired
     private UserRepository userDao;
     @Autowired

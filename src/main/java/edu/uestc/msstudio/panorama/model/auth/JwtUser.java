@@ -9,7 +9,7 @@
  * @date: 2017年5月10日 下午4:21:21 
  * @version: V1.0   
  */
-package edu.uestc.msstudio.panorama.model;
+package edu.uestc.msstudio.panorama.model.auth;
 
 import java.util.Collection;
 import java.util.Date;

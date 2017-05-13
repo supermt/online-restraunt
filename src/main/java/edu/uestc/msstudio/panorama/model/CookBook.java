@@ -23,6 +23,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 import edu.uestc.msstudio.panorama.model.enumeration.CookBookStatus;
 
@@ -36,15 +37,63 @@ public class CookBook {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @OneToOne(fetch = FetchType.EAGER)
+    private User author;
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "COOK_BOOK_IMAGE", joinColumns = {
             @JoinColumn(name = "COOK_BOOK_ID") }, inverseJoinColumns = {
                     @JoinColumn(name = "COMMENT_ID") })
     private List<ImageInfo> images;
     private CookBookStatus status;
-    @OneToMany(fetch=FetchType.EAGER)
-    private Set<CookingStep> steps;
+    @OneToMany(fetch = FetchType.EAGER)
+    private Set<CookStep> steps;
+    @OneToMany(fetch = FetchType.EAGER)
+    private Set<Comment> comments;
+    private String story;
+    private String material;
+    private String tips;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "COOK_BOOK_TYPE", joinColumns = {
+            @JoinColumn(name = "COOK_BOOK_ID") }, inverseJoinColumns = {
+                    @JoinColumn(name = "CATEGORY_ID") })
+    private List<MenuType> category;
 
+    public Set<Comment> getComments() {
+        return comments;
+    }
+    public void setComments(Set<Comment> comments) {
+        this.comments = comments;
+    }
+    public List<MenuType> getCategory() {
+        return category;
+    }
+    public String getStory() {
+        return story;
+    }
+    public void setStory(String story) {
+        this.story = story;
+    }
+    public void setCategory(List<MenuType> category) {
+        this.category = category;
+    }
+    public String getMaterial() {
+        return material;
+    }
+    public void setMaterial(String material) {
+        this.material = material;
+    }
+    public String getTips() {
+        return tips;
+    }
+    public void setTips(String tips) {
+        this.tips = tips;
+    }
+    public User getAuthor() {
+        return author;
+    }
+    public void setAuthor(User author) {
+        this.author = author;
+    }
     public Long getId() {
         return id;
     }
@@ -63,10 +112,10 @@ public class CookBook {
     public void setStatus(CookBookStatus status) {
         this.status = status;
     }
-    public Set<CookingStep> getSteps() {
+    public Set<CookStep> getSteps() {
         return steps;
     }
-    public void setSteps(Set<CookingStep> steps) {
+    public void setSteps(Set<CookStep> steps) {
         this.steps = steps;
     }
 }

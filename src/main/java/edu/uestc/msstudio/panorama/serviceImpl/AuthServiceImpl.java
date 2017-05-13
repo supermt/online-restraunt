@@ -34,69 +34,70 @@ import edu.uestc.msstudio.panorama.repo.UserRepository;
 import edu.uestc.msstudio.panorama.repo.UserRoleRepository;
 import edu.uestc.msstudio.panorama.service.AuthService;
 
-/** 
- * @ClassName: AuthServiceImpl 
+/**
+ * @ClassName: AuthServiceImpl
  * @Description: TODO
- * @author: MT 
+ * @author: MT
  */
 @Service
 public class AuthServiceImpl implements AuthService {
-
     private AuthenticationManager authenticationManager;
     @Autowired
     private UserRoleRepository userRoleDao;
     private UserDetailsService userDetailsService;
     private JwtTokenUtil jwtTokenUtil;
     private UserRepository userRepository;
-
     @Value("${jwt.tokenHead}")
     private String tokenHead;
 
     @Autowired
-    public AuthServiceImpl(
-            AuthenticationManager authenticationManager,
-            UserDetailsService userDetailsService,
-            JwtTokenUtil jwtTokenUtil,
+    public AuthServiceImpl(AuthenticationManager authenticationManager,
+            UserDetailsService userDetailsService, JwtTokenUtil jwtTokenUtil,
             UserRepository userRepository) {
         this.authenticationManager = authenticationManager;
         this.userDetailsService = userDetailsService;
         this.jwtTokenUtil = jwtTokenUtil;
         this.userRepository = userRepository;
     }
-
     @Override
     public User register(User userToAdd) {
         final String username = userToAdd.getUsername();
-        if(userRepository.findByUsername(username)!=null) {
+        if (userRepository.findByUsername(username) != null) {
             return null;
         }
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         final String rawPassword = userToAdd.getPassword();
         userToAdd.setPassword(encoder.encode(rawPassword));
         userToAdd.setLastPasswordResetDate(new Date());
+        if (userToAdd.getRoles() != null || userToAdd.getRoles().isEmpty()) {
+            // user has its own roles, which may be given out by some kind of administer;
+            return userRepository.save(userToAdd);
+        }
         List<UserRole> roles = new ArrayList<>();
         roles.add(userRoleDao.findByRole("ROLE_USER"));
         userToAdd.setRoles(roles);
         return userRepository.save(userToAdd);
     }
-
     @Override
     public String login(String username, String password) {
-        UsernamePasswordAuthenticationToken upToken = new UsernamePasswordAuthenticationToken(username, password);
-        final Authentication authentication = authenticationManager.authenticate(upToken);
+        UsernamePasswordAuthenticationToken upToken = new UsernamePasswordAuthenticationToken(
+                username, password);
+        final Authentication authentication = authenticationManager
+                .authenticate(upToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        final UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+        final UserDetails userDetails = userDetailsService
+                .loadUserByUsername(username);
         final String token = jwtTokenUtil.generateToken(userDetails);
         return token;
     }
-
     @Override
     public String refresh(String oldToken) {
         final String token = oldToken.substring(tokenHead.length());
         String username = jwtTokenUtil.getUsernameFromToken(token);
-        JwtUser user = (JwtUser) userDetailsService.loadUserByUsername(username);
-        if (jwtTokenUtil.canTokenBeRefreshed(token, user.getLastPasswordResetDate())){
+        JwtUser user = (JwtUser) userDetailsService
+                .loadUserByUsername(username);
+        if (jwtTokenUtil.canTokenBeRefreshed(token,
+                user.getLastPasswordResetDate())) {
             return jwtTokenUtil.refreshToken(token);
         }
         return null;

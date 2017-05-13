@@ -23,3 +23,9 @@ jwt:
       path: "/login"
       refresh: refresh
       register: "/register"
+      
+# Mongo GridName
+
+mongo:
+  gridname:
+    default: images

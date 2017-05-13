@@ -1,0 +1,25 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+  datasource:
+    url: jdbc:mysql://localhost:3306/db_sxf?createDatabaseIfNotExist=true
+    username: root
+    password: 
+
+# mongoDB connection
+  data:
+    mongodb:
+      uri: mongodb://127.0.0.1:27018/parnorama
+
+# JWT
+jwt:
+  header: Authorization
+  secret: mySecret
+  expiration: 604800
+  tokenHead: "Bearer "
+  route:
+    authentication:
+      path: "/login"
+      refresh: refresh
+      register: "/register"

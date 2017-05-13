@@ -28,15 +28,16 @@ public class UserRole {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String role;
-//    @ManyToOne
-//    private User owner;
-//
-//    public User getOwner() {
-//        return owner;
-//    }
-//    public void setOwner(User owner) {
-//        this.owner = owner;
-//    }
+
+    // @ManyToOne
+    // private User owner;
+    //
+    // public User getOwner() {
+    // return owner;
+    // }
+    // public void setOwner(User owner) {
+    // this.owner = owner;
+    // }
     public Long getId() {
         return id;
     }
@@ -48,12 +49,5 @@ public class UserRole {
     }
     public void setRole(String role) {
         this.role = role;
-    }
-    
-    public static UserRole getUserRole(){
-        UserRole result = new UserRole();
-        result.id = 1l;
-        result.role = "USER";
-        return result;
     }
 }

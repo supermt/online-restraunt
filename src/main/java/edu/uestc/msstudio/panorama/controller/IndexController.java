@@ -11,17 +11,13 @@
  */
 package edu.uestc.msstudio.panorama.controller;
 
-import java.io.File;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import edu.uestc.msstudio.panorama.common.utils.MongoImageUtils;
 import edu.uestc.msstudio.panorama.model.User;
 import edu.uestc.msstudio.panorama.repo.UserRepository;
 import io.swagger.annotations.Api;
@@ -38,8 +34,8 @@ import io.swagger.annotations.ApiOperation;
 public class IndexController {
     @Autowired
     private UserRepository userDao;
-    @Autowired
-    private MongoTemplate mongoTemplate;
+//    @Autowired
+//    private MongoTemplate mongoTemplate;
 
     @ApiOperation(value = "获取响应情况", notes = "正常情况下将会返回 Pong，如果未能正常返回请联系运维人员")
     @RequestMapping("/ping")

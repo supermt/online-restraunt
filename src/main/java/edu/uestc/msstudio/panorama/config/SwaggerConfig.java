@@ -35,10 +35,13 @@ public class SwaggerConfig {
     public Docket createRestApi() {
         return new Docket(DocumentationType.SWAGGER_2).apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.didispace.web"))
+                .apis(RequestHandlerSelectors
+                        .any())
                 .paths(PathSelectors.any()).build();
     }
     private ApiInfo apiInfo() {
-        return new ApiInfoBuilder().title("全景餐厅后台文档").version("1.0").build();
+        return new ApiInfoBuilder().title("全景餐厅").description("详细设计文档——可视化接口文档")
+                .termsOfServiceUrl("http://localhost:8080/").version("1.0")
+                .build();
     }
 }

@@ -11,7 +11,7 @@
  */
 package edu.uestc.msstudio.panorama.repo;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
 import edu.uestc.msstudio.panorama.model.User;
 
@@ -20,6 +20,6 @@ import edu.uestc.msstudio.panorama.model.User;
  * @Description: TODO
  * @author: MT
  */
-public interface UserRepository extends CrudRepository<User, Long> {
-    public User findByUsername(String username);
+public interface UserRepository extends PagingAndSortingRepository<User, Long> {
+    User findByUsername(String username);
 }

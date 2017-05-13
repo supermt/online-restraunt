@@ -23,6 +23,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * @ClassName: User
  * @Description: This is the User entity which describe the operator of this system
@@ -89,6 +91,7 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
+    @JsonIgnore
     public String getPassword() {
         return password;
     }

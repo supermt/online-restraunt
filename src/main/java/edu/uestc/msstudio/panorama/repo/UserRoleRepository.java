@@ -11,19 +11,17 @@
  */
 package edu.uestc.msstudio.panorama.repo;
 
-import java.util.List;
-
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Component;
 
 import edu.uestc.msstudio.panorama.model.UserRole;
 
-/** 
- * @ClassName: UserRoleRepository 
+/**
+ * @ClassName: UserRoleRepository
  * @Description: TODO
- * @author: MT 
+ * @author: MT
  */
 @Component
-public interface UserRoleRepository extends CrudRepository<UserRole, Long>{
-    public List<UserRole> findByRole(String role);
+public interface UserRoleRepository extends CrudRepository<UserRole, Long> {
+    public UserRole findByRole(String role);
 }

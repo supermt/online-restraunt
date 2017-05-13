@@ -75,7 +75,7 @@ public class AuthServiceImpl implements AuthService {
         userToAdd.setPassword(encoder.encode(rawPassword));
         userToAdd.setLastPasswordResetDate(new Date());
         List<UserRole> roles = new ArrayList<>();
-        roles.addAll(userRoleDao.findByRole("ROLE_USER"));
+        roles.add(userRoleDao.findByRole("ROLE_USER"));
         userToAdd.setRoles(roles);
         return userRepository.save(userToAdd);
     }

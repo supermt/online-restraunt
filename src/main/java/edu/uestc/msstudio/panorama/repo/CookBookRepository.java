@@ -26,6 +26,8 @@ import edu.uestc.msstudio.panorama.model.CookBook;
 public interface CookBookRepository
         extends PagingAndSortingRepository<CookBook, Long> {
     @Override
-    @Query("select * from CookBook CB where CB.status == CookBookStatus.PUBLISHED")
+    @Query("select CB from CookBook CB where CB.status = 'PUBLISHED'")
     Page<CookBook> findAll(Pageable pageable);
+    @Query("select CB from CookBook CB where CB.author.userid = ?1")
+    Page<CookBook> findByAuthor(Long authorid, Pageable pageable);
 }

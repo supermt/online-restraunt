@@ -15,15 +15,21 @@ import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import edu.uestc.msstudio.panorama.model.enumeration.CookBookStatus;
 
@@ -43,20 +49,22 @@ public class CookBook {
     @JoinTable(name = "COOK_BOOK_IMAGE", joinColumns = {
             @JoinColumn(name = "COOK_BOOK_ID") }, inverseJoinColumns = {
                     @JoinColumn(name = "COMMENT_ID") })
+    @Fetch(FetchMode.SUBSELECT)
     private List<ImageInfo> images;
+    @Enumerated(EnumType.STRING)
     private CookBookStatus status;
     @OneToMany(fetch = FetchType.EAGER)
     private Set<CookStep> steps;
     @OneToMany(fetch = FetchType.EAGER)
     private Set<Comment> comments;
+    @Lob
     private String story;
+    @Lob
     private String material;
+    @Lob
     private String tips;
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "COOK_BOOK_TYPE", joinColumns = {
-            @JoinColumn(name = "COOK_BOOK_ID") }, inverseJoinColumns = {
-                    @JoinColumn(name = "CATEGORY_ID") })
-    private List<MenuType> category;
+    @OneToMany(fetch = FetchType.EAGER)
+    private Set<MenuType> category;
 
     public Set<Comment> getComments() {
         return comments;
@@ -64,7 +72,7 @@ public class CookBook {
     public void setComments(Set<Comment> comments) {
         this.comments = comments;
     }
-    public List<MenuType> getCategory() {
+    public Set<MenuType> getCategory() {
         return category;
     }
     public String getStory() {
@@ -73,7 +81,7 @@ public class CookBook {
     public void setStory(String story) {
         this.story = story;
     }
-    public void setCategory(List<MenuType> category) {
+    public void setCategory(Set<MenuType> category) {
         this.category = category;
     }
     public String getMaterial() {

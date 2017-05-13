@@ -11,6 +11,7 @@
  */
 package edu.uestc.msstudio.panorama.controller;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -39,7 +40,10 @@ import edu.uestc.msstudio.panorama.model.ImageInfo;
 import edu.uestc.msstudio.panorama.model.MenuType;
 import edu.uestc.msstudio.panorama.model.annotation.LoginedUser;
 import edu.uestc.msstudio.panorama.model.enumeration.CookBookStatus;
+import edu.uestc.msstudio.panorama.repo.CommentRepository;
 import edu.uestc.msstudio.panorama.repo.CookBookRepository;
+import edu.uestc.msstudio.panorama.repo.CookStepRepository;
+import edu.uestc.msstudio.panorama.repo.MenuTypeRepository;
 import edu.uestc.msstudio.panorama.repo.UserRepository;
 
 /**
@@ -53,6 +57,12 @@ public class MenuController {
     private CookBookRepository menuDao;
     @Autowired
     private UserRepository userDao;
+    @Autowired
+    private CommentRepository commentDao;
+    @Autowired
+    private CookStepRepository stepDao;
+    @Autowired
+    private MenuTypeRepository typeDao;
 
     // get cookbooks
     @GetMapping("/book/")
@@ -89,6 +99,8 @@ public class MenuController {
         input.setAuthor(UserTokenUtils.getUserFromToken(userDao));
         if (input.getStatus() == null)
             input.setStatus(CookBookStatus.DRAFT);
+        typeDao.save(input.getCategory());
+        stepDao.save(input.getSteps());
         CookBook result = menuDao.save(input);
         return ResponseEntity.ok(result);
     }
@@ -128,11 +140,15 @@ public class MenuController {
     @PutMapping("/book/category/{id}")
     @Transactional
     public HttpEntity<?> updateCookBookCategory(@PathVariable Long id,
-            @RequestBody List<MenuType> category) {
+            @RequestBody Set<MenuType> category) {
         CookBook target = menuDao.findOne(id);
         if (target.getAuthor()
                 .equals(UserTokenUtils.getUserFromToken(userDao))) {
-            target.setCategory(category);
+            Set<MenuType> targetCategory = new HashSet<>();
+            for (MenuType type : typeDao.save(category)) {
+                targetCategory.add(type);
+            }
+            target.setCategory(targetCategory);
             return ResponseEntity.ok(menuDao.save(target));
         } else {
             return ResponseEntity.status(403)
@@ -199,7 +215,11 @@ public class MenuController {
             if (target.getStatus() == CookBookStatus.ABANDONED)
                 return ResponseEntity.status(402)
                         .body("The Cook Book is ABANDONED!");
-            target.setSteps(steps);
+            Set<CookStep> targetSteps = new HashSet<>();
+            for (CookStep step : stepDao.save(steps)) {
+                targetSteps.add(step);
+            }
+            target.setSteps(targetSteps);
             return ResponseEntity.ok(menuDao.save(target));
         } else {
             return ResponseEntity.status(403)
@@ -207,7 +227,7 @@ public class MenuController {
         }
     }
     @LoginedUser
-    @PutMapping("/book/steps/{id}")
+    @PutMapping("/book/image/{id}")
     @Transactional
     public HttpEntity<?> changeImages(@PathVariable Long id,
             @RequestParam List<ImageInfo> images) {
@@ -236,7 +256,7 @@ public class MenuController {
                 return ResponseEntity.status(402)
                         .body("The Cook Book is ABANDONED!");
             Set<Comment> comments = target.getComments();
-            comments.add(input);
+            comments.add(commentDao.save(input));
             return ResponseEntity.ok(menuDao.save(target));
         } else {
             return ResponseEntity.status(403)

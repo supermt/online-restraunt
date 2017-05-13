@@ -11,14 +11,21 @@
  */
 package edu.uestc.msstudio.panorama.repo;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 import edu.uestc.msstudio.panorama.model.Comment;
+import edu.uestc.msstudio.panorama.model.User;
 
-/** 
- * @ClassName: CommentRepository 
+/**
+ * @ClassName: CommentRepository
  * @Description: TODO
- * @author: MT 
+ * @author: MT
  */
-public interface CommentRepository extends PagingAndSortingRepository<Comment, Long>{
+public interface CommentRepository
+        extends PagingAndSortingRepository<Comment, Long> {
+    @Query("select C from Comment C where C.author.userid = ?1")
+    Page<Comment> findByAuthor(User target, Pageable pageable);
 }

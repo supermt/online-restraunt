@@ -26,7 +26,7 @@ public class CookStep {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private Long index;
+    private Long stepindex;
     private String description;
 
     public Long getId() {
@@ -36,10 +36,10 @@ public class CookStep {
         this.id = id;
     }
     public Long getIndex() {
-        return index;
+        return stepindex;
     }
     public void setIndex(Long index) {
-        this.index = index;
+        this.stepindex = index;
     }
     public String getDescription() {
         return description;

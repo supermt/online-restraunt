@@ -38,7 +38,6 @@ import edu.uestc.msstudio.panorama.config.filters.JwtAuthenticationTokenFilter;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    
     @Autowired
     private UserDetailsService userDetailsService;
 
@@ -65,12 +64,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 // 允许对于网站静态资源的无授权访问
                 .antMatchers(HttpMethod.GET, "/", "/*.html", "/favicon.ico",
-                        "/**/*.html", "/**/*.css", "/**/*.js")
+                        "/**/*.html", "/**/*.css", "/**/*.js", "/swagger**/**",
+                        "/configuration/**")
+                .permitAll().antMatchers(HttpMethod.GET, "/book/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/comment/**").permitAll()
+                .antMatchers("/v2/**").permitAll().antMatchers("/image/**")
                 .permitAll()
-                .antMatchers(HttpMethod.GET,"/book/**").permitAll()
-                .antMatchers(HttpMethod.GET,"/comment/**").permitAll()
-                .antMatchers("/v2/**").permitAll()
-                .antMatchers("/image/**").permitAll()
                 // 对于获取token的rest api要允许匿名访问
                 .antMatchers("/auth/**").permitAll()
                 // 某些测试服务器状态的路径应该打开

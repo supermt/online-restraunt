@@ -3,7 +3,7 @@ spring:
     hibernate:
       ddl-auto: create-drop
   datasource:
-    url: jdbc:mysql://localhost:3306/db_sxf?createDatabaseIfNotExist=true
+    url: jdbc:mysql://localhost:3306/db_sxf?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=UTF-8
     username: root
     password: 
 

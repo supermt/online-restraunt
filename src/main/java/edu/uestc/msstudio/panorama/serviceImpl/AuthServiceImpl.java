@@ -69,7 +69,7 @@ public class AuthServiceImpl implements AuthService {
         final String rawPassword = userToAdd.getPassword();
         userToAdd.setPassword(encoder.encode(rawPassword));
         userToAdd.setLastPasswordResetDate(new Date());
-        if (userToAdd.getRoles() != null || userToAdd.getRoles().isEmpty()) {
+        if (userToAdd.getRoles() != null && userToAdd.getRoles().isEmpty()) {
             // user has its own roles, which may be given out by some kind of administer;
             return userRepository.save(userToAdd);
         }

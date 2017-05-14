@@ -23,8 +23,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 /**
  * @ClassName: User
  * @Description: This is the User entity which describe the operator of this system
@@ -42,7 +40,7 @@ public class User {
     private String residence;
     private String email;
     private String password;
-    @ManyToMany(fetch=FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "USER_USER_ROLE", joinColumns = {
             @JoinColumn(name = "USER_ID") }, inverseJoinColumns = {
                     @JoinColumn(name = "USER_ROLE_ID") })
@@ -91,7 +89,6 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
-    @JsonIgnore
     public String getPassword() {
         return password;
     }

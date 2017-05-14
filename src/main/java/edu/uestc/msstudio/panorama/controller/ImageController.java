@@ -13,7 +13,10 @@ package edu.uestc.msstudio.panorama.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.UUID;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -52,7 +55,7 @@ public class ImageController {
     private MongoTemplate mongoTemplate;
     @Autowired
     private ImageRepository imageDao;
-    
+
     @PreAuthorize("hasRole('ROLE_USER')")
     @ApiOperation("This is the API to create a new Image")
     @PostMapping("/")
@@ -75,21 +78,20 @@ public class ImageController {
                     .build();
         }
     }
-    @PreAuthorize("hasRole('ROLE_USER')")
     @ApiOperation("Get Target File By id")
     @GetMapping("/{id}")
-    public HttpEntity<?> getTargetImage(@PathVariable Long id) {
+    public void getTargetImage(@PathVariable Long id,
+            HttpServletResponse response) {
         ImageInfo target = imageDao.findOne(id);
         try {
-            if (target.getEnable() == null || target.getEnable() == false) {
-                return ResponseEntity.notFound().build();
-            }
             GridFSDBFile targetImage = MongoImageUtils
                     .findPic(mongoTemplate, target.getImagename()).get(0);
-            return ResponseEntity.ok(targetImage.getInputStream());
+            OutputStream os = response.getOutputStream();
+            targetImage.writeTo(os);
+            os.flush();
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.notFound().build();
+            response.setStatus(404);
         }
     }
     @PreAuthorize("hasRole('ROLE_USER')")
@@ -118,19 +120,19 @@ public class ImageController {
             return ResponseEntity.notFound().build();
         }
     }
-    // @ApiOperation("Get Target File By its Name")
-    // @GetMapping("/name/")
-    // public void getTargetImageByName(@RequestParam String name,
-    // HttpServletResponse response) {
-    // try {
-    // GridFSDBFile targetImage = MongoImageUtils
-    // .findPic(mongoTemplate, name).get(0);
-    // OutputStream os = response.getOutputStream();
-    // targetImage.writeTo(os);
-    // os.flush();
-    // } catch (Exception e) {
-    // e.printStackTrace();
-    // response.setStatus(404);
-    // }
-    // }
+    @ApiOperation("Get Target File By its Name")
+    @GetMapping("/name/")
+    public void getTargetImageByName(@RequestParam String name,
+            HttpServletResponse response) {
+        try {
+            GridFSDBFile targetImage = MongoImageUtils
+                    .findPic(mongoTemplate, name).get(0);
+            OutputStream os = response.getOutputStream();
+            targetImage.writeTo(os);
+            os.flush();
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.setStatus(404);
+        }
+    }
 }
